@@ -2,15 +2,32 @@ import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import getPastOrders from "../api/getPastOrders";
+import getPastOrder from "../api/getPastOrder";
+import Modal from "../Modal";
+
+const intl = new Intl.NumberFormat("en-US", {
+	style: "currency",
+	currency: "USD",
+});
 
 export const Route = createLazyFileRoute("/past")({
 	component: PastOrdersRoute,
 });
 
 function PastOrdersRoute() {
+	const [focusedOrder, setFocusedOrder] = useState();
 	// state untuk menyimpan halaman yang sedang dibuka, dimulai dari halaman 1.
 	// page (index ke-0) itu value-nya, setPage (index ke-1) fungsi untuk mengubahnya.
 	const [page, setPage] = useState(1);
+
+	const { isLoading: isLoadingFocusedOrder, data: focusedOrderData } = useQuery(
+		{
+			queryKey: ["past-order", focusedOrder],
+			queryFn: () => getPastOrder(focusedOrder),
+			enabled: !!focusedOrder,
+			staleTime: 24 * 60 * 60 * 1000,
+		},
+	);
 
 	// useQuery dari React Query dipakai untuk mengambil data dari server (fetching) sekaligus mengelola cache-nya.
 	// Hasilnya berupa object, di sini kita ambil isLoading (true selama data pertama kali diambil) dan data (hasil dari queryFn).
@@ -48,7 +65,11 @@ function PastOrdersRoute() {
 				<tbody>
 					{data.map((order) => (
 						<tr key={order.order_id}>
-							<td>{order.order_id}</td>
+							<td>
+								<button onClick={() => setFocusedOrder(order.order_id)}>
+									{order.order_id}
+								</button>
+							</td>
 							<td>{order.date}</td>
 							<td>{order.time}</td>
 						</tr>
@@ -64,6 +85,42 @@ function PastOrdersRoute() {
 					Next
 				</button>
 			</div>
+			{focusedOrder ? (
+				<Modal>
+					<h2>Order # {focusedOrder}</h2>
+					{!isLoadingFocusedOrder ? (
+						<table>
+							<thead>
+								<tr>
+									<td>Image</td>
+									<td>Name</td>
+									<td>Size</td>
+									<td>Quantity</td>
+									<td>Price</td>
+									<td>Total</td>
+								</tr>
+							</thead>
+							<tbody>
+								{focusedOrderData.orderItems.map((pizza) => (
+									<tr key={`${pizza.pizzaTypeId}_${pizza.name}`}>
+										<td>
+											<img src={pizza.image} alt={pizza} />
+										</td>
+										<td>{pizza.name}</td>
+										<td>{pizza.size}</td>
+										<td>{pizza.quantity}</td>
+										<td>{intl.format(pizza.price)}</td>
+										<td>{intl.format(pizza.total)}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					) : (
+						<p>Sedang memuat...</p>
+					)}
+					<button onClick={() => setFocusedOrder()}>Close</button>
+				</Modal>
+			) : null}
 		</div>
 	);
 }
