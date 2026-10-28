@@ -1,16 +1,20 @@
+import { createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, useContext } from "react";
-import Pizza from "./Pizza";
-import Cart from "./Cart";
-import { CartContext } from "./contexts";
+import Pizza from "../Pizza";
+import Cart from "../Cart";
+import { CartContext } from "../contexts";
 
+// intl untuk format angka menjadi bentuk currency
 const intl = new Intl.NumberFormat("en-US", {
 	style: "currency",
 	currency: "USD",
 });
 
-export default function Order() {
-	// Hook: useState, useEffect, useRef, useLayoutEffect, dll.
-	// useState return dua hal: contohnya pizzaType (index ke-0) itu adalah value dari useState tersebut, sedangka setPizzaType (index ke-1) merupakan fungsi untuk mengubah valuenya
+export const Route = createLazyFileRoute("/order")({
+	component: Order,
+});
+
+function Order() {
 	const [pizzaType, setPizzaType] = useState("pepperoni");
 	const [pizzaSize, setPizzaSize] = useState("S");
 	const [pizzaTypes, setPizzaTypes] = useState([]);
