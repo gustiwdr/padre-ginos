@@ -1,6 +1,6 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { useState } from "react";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { CartContext } from "../contexts";
 import Header from "../Header";
