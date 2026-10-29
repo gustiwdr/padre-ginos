@@ -23,7 +23,7 @@ function ContactRoute() {
 		<div className="contact">
 			<h2>Contact</h2>
 			{mutation.isSuccess ? (
-				<h3>Terkirim!</h3>
+				<h3>Submitted!</h3>
 			) : (
 				<form action="" onSubmit={mutation.mutate}>
 					<input type="text" name="name" placeholder="Name" />
