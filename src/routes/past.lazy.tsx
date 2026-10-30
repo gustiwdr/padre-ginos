@@ -1,11 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
-import type { PastOrder, PastOrderDetail } from "../APIResponsesTypes";
 
 const intl = new Intl.NumberFormat("en-US", {
 	style: "currency",
@@ -30,16 +29,15 @@ function PastOrdersRoute() {
 	// page (index ke-0) itu value-nya, setPage (index ke-1) fungsi untuk mengubahnya.
 	const [page, setPage] = useState(1);
 
-	const { data: focusedOrderData } = useQuery<PastOrderDetail>({
+	const { data: focusedOrderData } = useQuery({
 		queryKey: ["past-order", focusedOrder],
-		queryFn: () => getPastOrder(focusedOrder),
-		enabled: !!focusedOrder,
+		queryFn: focusedOrder ? () => getPastOrder(focusedOrder) : skipToken,
 		staleTime: 24 * 60 * 60 * 1000,
 	});
 
 	// useQuery dari React Query dipakai untuk mengambil data dari server (fetching) sekaligus mengelola cache-nya.
 	// Hasilnya berupa object, di sini kita ambil isLoading (true selama data pertama kali diambil) dan data (hasil dari queryFn).
-	const { isLoading, data } = useQuery<PastOrder[]>({
+	const { isLoading, data } = useQuery({
 		// queryKey: "identitas" cache untuk query ini.
 		// Karena ada page di dalamnya, tiap halaman punya cache sendiri, dan setiap page berubah, query otomatis jalan lagi.
 		queryKey: ["past-orders", page],
