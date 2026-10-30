@@ -5,6 +5,7 @@ import getPastOrders from "../api/getPastOrders";
 import getPastOrder from "../api/getPastOrder";
 import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
+import type { PastOrder, PastOrderDetail } from "../APIResponsesTypes";
 
 const intl = new Intl.NumberFormat("en-US", {
 	style: "currency",
@@ -24,23 +25,21 @@ function ErrorBoundaryWrappedPastOrderRoute() {
 }
 
 function PastOrdersRoute() {
-	const [focusedOrder, setFocusedOrder] = useState();
+	const [focusedOrder, setFocusedOrder] = useState<number>();
 	// state untuk menyimpan halaman yang sedang dibuka, dimulai dari halaman 1.
 	// page (index ke-0) itu value-nya, setPage (index ke-1) fungsi untuk mengubahnya.
 	const [page, setPage] = useState(1);
 
-	const { isLoading: isLoadingFocusedOrder, data: focusedOrderData } = useQuery(
-		{
-			queryKey: ["past-order", focusedOrder],
-			queryFn: () => getPastOrder(focusedOrder),
-			enabled: !!focusedOrder,
-			staleTime: 24 * 60 * 60 * 1000,
-		},
-	);
+	const { data: focusedOrderData } = useQuery<PastOrderDetail>({
+		queryKey: ["past-order", focusedOrder],
+		queryFn: () => getPastOrder(focusedOrder),
+		enabled: !!focusedOrder,
+		staleTime: 24 * 60 * 60 * 1000,
+	});
 
 	// useQuery dari React Query dipakai untuk mengambil data dari server (fetching) sekaligus mengelola cache-nya.
 	// Hasilnya berupa object, di sini kita ambil isLoading (true selama data pertama kali diambil) dan data (hasil dari queryFn).
-	const { isLoading, data } = useQuery({
+	const { isLoading, data } = useQuery<PastOrder[]>({
 		// queryKey: "identitas" cache untuk query ini.
 		// Karena ada page di dalamnya, tiap halaman punya cache sendiri, dan setiap page berubah, query otomatis jalan lagi.
 		queryKey: ["past-orders", page],
@@ -59,6 +58,10 @@ function PastOrdersRoute() {
 				<h2>Sedang memuat...</h2>
 			</div>
 		);
+	}
+
+	if (!data) {
+		throw new Error("Past orders could not be loaded");
 	}
 
 	return (
@@ -97,7 +100,7 @@ function PastOrdersRoute() {
 			{focusedOrder ? (
 				<Modal>
 					<h2>Order # {focusedOrder}</h2>
-					{!isLoadingFocusedOrder ? (
+					{focusedOrderData ? (
 						<table>
 							<thead>
 								<tr>
@@ -113,7 +116,7 @@ function PastOrdersRoute() {
 								{focusedOrderData.orderItems.map((pizza) => (
 									<tr key={`${pizza.pizzaTypeId}_${pizza.name}`}>
 										<td>
-											<img src={pizza.image} alt={pizza} />
+											<img src={pizza.image} alt={pizza.name} />
 										</td>
 										<td>{pizza.name}</td>
 										<td>{pizza.size}</td>
@@ -127,7 +130,7 @@ function PastOrdersRoute() {
 					) : (
 						<p>Sedang memuat...</p>
 					)}
-					<button onClick={() => setFocusedOrder()}>Close</button>
+					<button onClick={() => setFocusedOrder(undefined)}>Close</button>
 				</Modal>
 			) : null}
 		</div>
