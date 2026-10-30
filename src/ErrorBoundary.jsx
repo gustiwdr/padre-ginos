@@ -12,8 +12,6 @@ class ErrorBoundary extends Component {
 	}
 
 	render() {
-		throw new Error("...");
-
 		if (this.state.hasError) {
 			return (
 				<div className="error-boundary">

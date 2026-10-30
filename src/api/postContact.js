@@ -1,5 +1,3 @@
-import { jsxDEV } from "react/jsx-dev-runtime";
-
 export default async function postContact(name, email, message) {
 	const res = await fetch("/api/contact", {
 		method: "POST",
