@@ -1,6 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import type { SubmitEvent } from "react";
 import postContact from "../api/postContact";
+
+function getString(formData: FormData, key: string): string {
+	const value = formData.get(key);
+	return typeof value === "string" ? value : "";
+}
 
 export const Route = createLazyFileRoute("/contact")({
 	component: ContactRoute,
@@ -8,13 +14,14 @@ export const Route = createLazyFileRoute("/contact")({
 
 function ContactRoute() {
 	const mutation = useMutation({
-		mutationFn: function (e) {
+		mutationFn: function (e: SubmitEvent<HTMLFormElement>) {
 			e.preventDefault();
 			const formData = new FormData(e.target);
+
 			return postContact(
-				formData.get("name"),
-				formData.get("email"),
-				formData.get("message"),
+				getString(formData, "name"),
+				getString(formData, "email"),
+				getString(formData, "message"),
 			);
 		},
 	});
