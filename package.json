@@ -8,7 +8,9 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"test": "vitest"
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"coverage": "vitest --coverage"
 	},
 	"keywords": [],
 	"author": "",
