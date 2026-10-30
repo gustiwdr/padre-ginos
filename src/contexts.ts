@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import type { Pizza, PizzaSize } from "./APIResponsesTypes";
 
 /**
  * CartContext: context untuk berbagi data keranjang belanja ke seluruh komponen.
@@ -10,4 +11,12 @@ import { createContext } from "react";
  * Nilai default ini hanya dipakai saat komponen mengakses context di luar <CartContext.Provider>. Nilai aslinya diisi oleh Provider (biasanya dari useState di komponen induk (App)).
  */
 
-export const CartContext = createContext([[], function () {}]);
+export interface CartItem {
+	pizza: Pizza;
+	size: PizzaSize;
+	price: String;
+}
+
+export const CartContext = createContext<
+	[CartItem[], (cart: CartItem[]) => void]
+>([[], () => {}]);
