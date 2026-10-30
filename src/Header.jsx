@@ -12,7 +12,9 @@ export default function Header() {
 			</Link>
 			<div className="nav-cart">
 				🛒
-				<span className="nav-cart-number">{cart.length}</span>
+				<span data-testid="cart-number" className="nav-cart-number">
+					{cart.length}
+				</span>
 			</div>
 		</nav>
 	);
