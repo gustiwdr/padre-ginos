@@ -1,20 +1,39 @@
 import js from "@eslint/js";
 import globals from "globals";
-import prettier, { rules } from "eslint-config-prettier";
+import prettier from "eslint-config-prettier";
 import reactPlugin from "eslint-plugin-react";
 import pluginQuery from "@tanstack/eslint-plugin-query";
+import tseslint from "typescript-eslint";
 
-/** @type {import('eslint').Linter.Config} */
+/** @type {import('eslint').Linter.Config[]} */
 export default [
-	js.configs.recommended,
+	{
+		ignores: ["coverage/**", "dist/**", "node_modules/**"],
+	},
+	{
+		...js.configs.recommended,
+		files: ["**/*.{js,jsx}"],
+	},
 	{
 		...reactPlugin.configs.flat.recommended,
 		settings: { react: { version: "detect" } },
 	},
 	reactPlugin.configs.flat["jsx-runtime"],
 	...pluginQuery.configs["flat/recommended"],
+	...tseslint.configs.recommendedTypeChecked.map((config) => ({
+		...config,
+		files: ["**/*.{ts,tsx}"],
+	})),
 	{
-		files: ["**/*.js", "**/*.jsx"],
+		files: ["**/*.{ts,tsx}"],
+		languageOptions: {
+			parserOptions: {
+				projectService: true,
+			},
+		},
+	},
+	{
+		files: ["**/*.{js,jsx}"],
 		languageOptions: {
 			globals: {
 				...globals.browser,
