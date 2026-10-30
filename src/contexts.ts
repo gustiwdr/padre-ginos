@@ -14,7 +14,7 @@ import type { Pizza, PizzaSize } from "./APIResponsesTypes";
 export interface CartItem {
 	pizza: Pizza;
 	size: PizzaSize;
-	price: String;
+	price: string;
 }
 
 export const CartContext = createContext<
