@@ -22,15 +22,20 @@ export default [
 	...pluginQuery.configs["flat/recommended"],
 	...tseslint.configs.recommendedTypeChecked.map((config) => ({
 		...config,
-		files: ["**/*.{ts,tsx}"],
+		files: ["**/*.{js,jsx,ts,tsx}"],
 	})),
 	{
-		files: ["**/*.{ts,tsx}"],
+		files: ["**/*.{js,jsx,ts,tsx}"],
 		languageOptions: {
 			parserOptions: {
 				projectService: true,
+				tsconfigRootDir: import.meta.dirname,
 			},
 		},
+	},
+	{
+		files: ["*.js", "*.mjs"],
+		...tseslint.configs.disableTypeChecked,
 	},
 	{
 		files: ["**/*.{js,jsx}"],
