@@ -363,16 +363,6 @@ td img {
 	width: 50px;
 }
 
-.error-boundary {
-	min-height: 400px;
-	text-align: center;
-}
-
-.error-boundary a {
-	color: var(--primary);
-	text-decoration: underline;
-}
-
 .contact form {
 	display: flex;
 	flex-direction: column;
