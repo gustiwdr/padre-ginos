@@ -11,3 +11,7 @@
 	--color-border: #ccc;
 	--font-pacifico: Pacifico, cursive, sans-serif;
 }
+
+@plugin "@tailwindcss/forms" {
+	strategy: "class";
+}

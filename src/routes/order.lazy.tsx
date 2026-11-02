@@ -15,6 +15,9 @@ export const Route = createLazyFileRoute("/order")({
 	component: Order,
 });
 
+const sizeLabelClass =
+	"mx-3.75 mb-2.5 inline-flex h-20 w-20 cursor-pointer items-center justify-center rounded-[5px] border border-[#999] bg-border text-[#999] peer-checked:bg-white peer-checked:text-[#333] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary";
+
 function Order() {
 	const [pizzaType, setPizzaType] = useState("pepperoni");
 	const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
@@ -62,9 +65,10 @@ function Order() {
 	}
 
 	return (
-		<div className="order">
+		<div className="w-full ml-[5%]">
 			<h2>Create Order</h2>
 			<form
+				className="flex justify-between"
 				action=""
 				onSubmit={(e) => {
 					e.preventDefault();
@@ -76,10 +80,16 @@ function Order() {
 					setCart([...cart, { pizza: selectedPizza, size: pizzaSize, price }]);
 				}}
 			>
-				<div>
-					<div>
-						<label htmlFor="pizzaType">Pizza Type:</label>
+				<div className="my-2.5 w-full border-r border-border p-3.75 text-center">
+					<div className="my-2.5 text-center">
+						<label
+							className="mb-2.5 block text-[20px] text-secondary"
+							htmlFor="pizzaType"
+						>
+							Pizza Type:
+						</label>
 						<select
+							className="form-select mb-7.5 block w-full py-1.25 pl-1.25 text-[16px]"
 							name="pizzaType"
 							onChange={(e) => setPizzaType(e.target.value)}
 							value={pizzaType}
@@ -91,11 +101,17 @@ function Order() {
 							))}
 						</select>
 					</div>
-					<div>
-						<label htmlFor="pizzaSize">Pizza Size:</label>
+					<div className="my-2.5 text-center">
+						<label
+							className="mb-2.5 block text-[20px] text-secondary"
+							htmlFor="pizzaSize"
+						>
+							Pizza Size:
+						</label>
 						<div>
 							<span>
 								<input
+									className="peer sr-only"
 									type="radio"
 									name="pizzaSize"
 									id="pizza-s"
@@ -103,10 +119,13 @@ function Order() {
 									value="S"
 									onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
 								/>
-								<label htmlFor="pizza-s">Small</label>
+								<label className={sizeLabelClass} htmlFor="pizza-s">
+									Small
+								</label>
 							</span>
 							<span>
 								<input
+									className="peer sr-only"
 									type="radio"
 									name="pizzaSize"
 									id="pizza-m"
@@ -114,10 +133,13 @@ function Order() {
 									value="M"
 									onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
 								/>
-								<label htmlFor="pizza-m">Medium</label>
+								<label className={sizeLabelClass} htmlFor="pizza-m">
+									Medium
+								</label>
 							</span>
 							<span>
 								<input
+									className="peer sr-only"
 									type="radio"
 									name="pizzaSize"
 									id="pizza-l"
@@ -125,16 +147,23 @@ function Order() {
 									value="L"
 									onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
 								/>
-								<label htmlFor="pizza-l">Large</label>
+								<label className={sizeLabelClass} htmlFor="pizza-l">
+									Large
+								</label>
 							</span>
 						</div>
 					</div>
-					<button type="submit">Add to cart</button>
+					<button
+						className="inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:opacity-50"
+						type="submit"
+					>
+						Add to cart
+					</button>
 				</div>
 				{loading || !selectedPizza ? (
 					<h3>Sedang memuat ...</h3>
 				) : (
-					<div className="order-pizza">
+					<div className="my-2.5 ml-6.25 w-full p-3.75 text-center">
 						<Pizza
 							name={selectedPizza.name}
 							description={selectedPizza.description}
