@@ -40,19 +40,19 @@ function ContactRoute() {
 					onSubmit={mutation.mutate}
 				>
 					<input
-						className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999]"
+						className="my-3.75 w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999]"
 						type="text"
 						name="name"
 						placeholder="Name"
 					/>
 					<input
-						className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999]"
+						className="my-3.75 w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999]"
 						type="email"
 						name="email"
 						placeholder="Email"
 					/>
 					<textarea
-						className="my-3.75 min-h-[200px] w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary"
+						className="my-3.75 min-h-[200px] w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary"
 						name="message"
 						id=""
 						placeholder="Message"

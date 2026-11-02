@@ -65,111 +65,116 @@ function Order() {
 	}
 
 	return (
-		<div className="w-full ml-[5%]">
-			<h2>Create Order</h2>
-			<form
-				className="flex justify-between"
-				action=""
-				onSubmit={(e) => {
-					e.preventDefault();
+		<div className="mx-auto grid max-w-325 grid-cols-1 gap-12.5 lg:grid-cols-[2fr_1fr]">
+			<div className="w-full lg:ml-[5%]">
+				<h2>Create Order</h2>
+				<form
+					className="flex flex-col md:flex-row md:justify-between"
+					action=""
+					onSubmit={(e) => {
+						e.preventDefault();
 
-					if (!selectedPizza || !price) {
-						return;
-					}
+						if (!selectedPizza || !price) {
+							return;
+						}
 
-					setCart([...cart, { pizza: selectedPizza, size: pizzaSize, price }]);
-				}}
-			>
-				<div className="my-2.5 w-full border-r border-border p-3.75 text-center">
-					<div className="my-2.5 text-center">
-						<label
-							className="mb-2.5 block text-[20px] text-secondary"
-							htmlFor="pizzaType"
-						>
-							Pizza Type:
-						</label>
-						<select
-							className="form-select mb-7.5 block w-full py-1.25 pl-1.25 text-[16px]"
-							name="pizzaType"
-							onChange={(e) => setPizzaType(e.target.value)}
-							value={pizzaType}
-						>
-							{pizzaTypes.map((pizza) => (
-								<option key={pizza.id} value={pizza.id}>
-									{pizza.name}
-								</option>
-							))}
-						</select>
-					</div>
-					<div className="my-2.5 text-center">
-						<label
-							className="mb-2.5 block text-[20px] text-secondary"
-							htmlFor="pizzaSize"
-						>
-							Pizza Size:
-						</label>
-						<div>
-							<span>
-								<input
-									className="peer sr-only"
-									type="radio"
-									name="pizzaSize"
-									id="pizza-s"
-									checked={pizzaSize === "S"}
-									value="S"
-									onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
-								/>
-								<label className={sizeLabelClass} htmlFor="pizza-s">
-									Small
-								</label>
-							</span>
-							<span>
-								<input
-									className="peer sr-only"
-									type="radio"
-									name="pizzaSize"
-									id="pizza-m"
-									checked={pizzaSize === "M"}
-									value="M"
-									onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
-								/>
-								<label className={sizeLabelClass} htmlFor="pizza-m">
-									Medium
-								</label>
-							</span>
-							<span>
-								<input
-									className="peer sr-only"
-									type="radio"
-									name="pizzaSize"
-									id="pizza-l"
-									checked={pizzaSize === "L"}
-									value="L"
-									onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
-								/>
-								<label className={sizeLabelClass} htmlFor="pizza-l">
-									Large
-								</label>
-							</span>
+						setCart([
+							...cart,
+							{ pizza: selectedPizza, size: pizzaSize, price },
+						]);
+					}}
+				>
+					<div className="my-2.5 w-full border-b border-border p-3.75 text-center md:border-r md:border-b-0">
+						<div className="my-2.5 text-center">
+							<label
+								className="mb-2.5 block text-[20px] text-secondary"
+								htmlFor="pizzaType"
+							>
+								Pizza Type:
+							</label>
+							<select
+								className="form-select mb-7.5 block w-full py-1.25 pl-1.25 text-[16px]"
+								name="pizzaType"
+								onChange={(e) => setPizzaType(e.target.value)}
+								value={pizzaType}
+							>
+								{pizzaTypes.map((pizza) => (
+									<option key={pizza.id} value={pizza.id}>
+										{pizza.name}
+									</option>
+								))}
+							</select>
 						</div>
+						<div className="my-2.5 text-center">
+							<label
+								className="mb-2.5 block text-[20px] text-secondary"
+								htmlFor="pizzaSize"
+							>
+								Pizza Size:
+							</label>
+							<div>
+								<span>
+									<input
+										className="peer sr-only"
+										type="radio"
+										name="pizzaSize"
+										id="pizza-s"
+										checked={pizzaSize === "S"}
+										value="S"
+										onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+									/>
+									<label className={sizeLabelClass} htmlFor="pizza-s">
+										Small
+									</label>
+								</span>
+								<span>
+									<input
+										className="peer sr-only"
+										type="radio"
+										name="pizzaSize"
+										id="pizza-m"
+										checked={pizzaSize === "M"}
+										value="M"
+										onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+									/>
+									<label className={sizeLabelClass} htmlFor="pizza-m">
+										Medium
+									</label>
+								</span>
+								<span>
+									<input
+										className="peer sr-only"
+										type="radio"
+										name="pizzaSize"
+										id="pizza-l"
+										checked={pizzaSize === "L"}
+										value="L"
+										onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+									/>
+									<label className={sizeLabelClass} htmlFor="pizza-l">
+										Large
+									</label>
+								</span>
+							</div>
+						</div>
+						<button className="btn" type="submit">
+							Add to cart
+						</button>
 					</div>
-					<button className="btn" type="submit">
-						Add to cart
-					</button>
-				</div>
-				{loading || !selectedPizza ? (
-					<h3>Sedang memuat ...</h3>
-				) : (
-					<div className="my-2.5 ml-6.25 w-full p-3.75 text-center">
-						<Pizza
-							name={selectedPizza.name}
-							description={selectedPizza.description}
-							image={selectedPizza.image}
-						/>
-						<p>{price}</p>
-					</div>
-				)}
-			</form>
+					{loading || !selectedPizza ? (
+						<h3>Sedang memuat ...</h3>
+					) : (
+						<div className="my-2.5 w-full p-3.75 text-center md:ml-6.25">
+							<Pizza
+								name={selectedPizza.name}
+								description={selectedPizza.description}
+								image={selectedPizza.image}
+							/>
+							<p>{price}</p>
+						</div>
+					)}
+				</form>
+			</div>
 			{loading ? (
 				<h2>Sedang memuat ...</h2>
 			) : (
