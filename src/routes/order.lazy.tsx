@@ -153,10 +153,7 @@ function Order() {
 							</span>
 						</div>
 					</div>
-					<button
-						className="inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] text-primary hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:opacity-50"
-						type="submit"
-					>
+					<button className="btn" type="submit">
 						Add to cart
 					</button>
 				</div>

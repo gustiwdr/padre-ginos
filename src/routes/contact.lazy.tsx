@@ -57,7 +57,7 @@ function ContactRoute() {
 						id=""
 						placeholder="Message"
 					></textarea>
-					<button>Submit</button>
+					<button className="btn">Submit</button>
 				</form>
 			)}
 		</div>
