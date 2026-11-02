@@ -11,6 +11,9 @@ const intl = new Intl.NumberFormat("en-US", {
 	currency: "USD",
 });
 
+const tableClass =
+	"my-6.25 w-full min-w-[400px] border-collapse border border-[#ddd] font-sans text-[0.9em] [&_th]:px-3.75 [&_th]:py-3 [&_th]:text-center [&_td]:px-3.75 [&_td]:py-3 [&_td]:text-center [&_thead_tr]:bg-secondary [&_thead_tr]:text-left [&_thead_tr]:text-white [&_tbody_tr]:border-b [&_tbody_tr]:border-[#ddd] [&_tbody_tr:nth-of-type(even)]:bg-[#f6fef0] [&_tbody_tr:last-of-type]:border-b-2 [&_tbody_tr:last-of-type]:border-secondary";
+
 export const Route = createLazyFileRoute("/past")({
 	component: ErrorBoundaryWrappedPastOrderRoute,
 });
@@ -25,8 +28,6 @@ function ErrorBoundaryWrappedPastOrderRoute() {
 
 function PastOrdersRoute() {
 	const [focusedOrder, setFocusedOrder] = useState<number>();
-	// state untuk menyimpan halaman yang sedang dibuka, dimulai dari halaman 1.
-	// page (index ke-0) itu value-nya, setPage (index ke-1) fungsi untuk mengubahnya.
 	const [page, setPage] = useState(1);
 
 	const { data: focusedOrderData } = useQuery({
@@ -35,24 +36,15 @@ function PastOrdersRoute() {
 		staleTime: 24 * 60 * 60 * 1000,
 	});
 
-	// useQuery dari React Query dipakai untuk mengambil data dari server (fetching) sekaligus mengelola cache-nya.
-	// Hasilnya berupa object, di sini kita ambil isLoading (true selama data pertama kali diambil) dan data (hasil dari queryFn).
 	const { isLoading, data } = useQuery({
-		// queryKey: "identitas" cache untuk query ini.
-		// Karena ada page di dalamnya, tiap halaman punya cache sendiri, dan setiap page berubah, query otomatis jalan lagi.
 		queryKey: ["past-orders", page],
-
-		// queryFn: fungsi yang benar-benar mengambil data, di sini getPastOrders sesuai halaman yang aktif.
 		queryFn: () => getPastOrders(page),
-
-		// staleTime: berapa lama (dalam milidetik) data dianggap masih "fresh".
-		// 30000 ms = 30 detik, selama itu React Query memakai cache dan tidak fetch ulang ke server.
 		staleTime: 30000,
 	});
 
 	if (isLoading) {
 		return (
-			<div className="past-orders">
+			<div className="mx-auto min-h-[650px] w-[90%] max-w-[900px]">
 				<h2>Sedang memuat...</h2>
 			</div>
 		);
@@ -63,8 +55,8 @@ function PastOrdersRoute() {
 	}
 
 	return (
-		<div className="past-orders">
-			<table>
+		<div className="mx-auto min-h-[650px] w-[90%] max-w-[900px]">
+			<table className={tableClass}>
 				<thead>
 					<tr>
 						<td>ID</td>
@@ -86,20 +78,22 @@ function PastOrdersRoute() {
 					))}
 				</tbody>
 			</table>
-			<div className="pages">
+
+			<div className="flex items-center justify-evenly">
 				<button disabled={page <= 1} onClick={() => setPage(page - 1)}>
 					Previous
 				</button>
-				<div>{page}</div>
+				<div className="font-pacifico text-xl text-primary">{page}</div>
 				<button disabled={data.length < 10} onClick={() => setPage(page + 1)}>
 					Next
 				</button>
 			</div>
+
 			{focusedOrder ? (
 				<Modal>
 					<h2>Order # {focusedOrder}</h2>
 					{focusedOrderData ? (
-						<table>
+						<table className={tableClass}>
 							<thead>
 								<tr>
 									<td>Image</td>
@@ -114,7 +108,11 @@ function PastOrdersRoute() {
 								{focusedOrderData.orderItems.map((pizza) => (
 									<tr key={`${pizza.pizzaTypeId}_${pizza.name}`}>
 										<td>
-											<img src={pizza.image} alt={pizza.name} />
+											<img
+												className="w-12.5"
+												src={pizza.image}
+												alt={pizza.name}
+											/>
 										</td>
 										<td>{pizza.name}</td>
 										<td>{pizza.size}</td>
