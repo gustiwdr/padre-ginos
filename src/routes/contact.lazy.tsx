@@ -30,12 +30,33 @@ function ContactRoute() {
 		<div className="contact">
 			<h2>Contact</h2>
 			{mutation.isSuccess ? (
-				<h3>Submitted!</h3>
+				<h3 className="m-12.5 text-center font-normal text-[30px] text-secondary font-pacifico">
+					Submitted!
+				</h3>
 			) : (
-				<form action="" onSubmit={mutation.mutate}>
-					<input type="text" name="name" placeholder="Name" />
-					<input type="email" name="email" placeholder="Email" />
-					<textarea name="message" id="" placeholder="Message"></textarea>
+				<form
+					className="flex flex-col items-center"
+					action=""
+					onSubmit={mutation.mutate}
+				>
+					<input
+						className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999]"
+						type="text"
+						name="name"
+						placeholder="Name"
+					/>
+					<input
+						className="my-3.75 w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999]"
+						type="email"
+						name="email"
+						placeholder="Email"
+					/>
+					<textarea
+						className="my-3.75 min-h-[200px] w-[500px] rounded-[5px] border-2 border-border p-2 focus:border-primary"
+						name="message"
+						id=""
+						placeholder="Message"
+					></textarea>
 					<button>Submit</button>
 				</form>
 			)}
