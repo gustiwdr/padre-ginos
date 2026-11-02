@@ -1,5 +1,4 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/")({
 	component: Index,
@@ -7,20 +6,30 @@ export const Route = createLazyFileRoute("/")({
 
 function Index() {
 	return (
-		<div className="index">
-			<div className="index-brand">
-				<h1>Padre Gino&apos;s</h1>
-				<p>Welcome to the best pizza in town!</p>
+		<div className="mx-auto my-30 grid max-w-175 grid-cols-2 gap-7.5">
+			<div className="flex flex-col">
+				<h1 className="font-pacifico font-normal text-primary">
+					Padre Gino&apos;s
+				</h1>
+				<p className="max-w-78.75 text-[40px] font-bold text-secondary uppercase">
+					Welcome to the best pizza in town!
+				</p>
 			</div>
-			<ul>
-				<li>
-					<Link to="/order">Order</Link>
+			<ul className="flex flex-col items-center justify-center">
+				<li className="w-full max-w-62.5 text-center">
+					<Link className="mb-2.5 block" to="/order">
+						Order
+					</Link>
 				</li>
-				<li>
-					<Link to="/past">Order History</Link>
+				<li className="w-full max-w-62.5 text-center">
+					<Link className="mb-2.5 block" to="/past">
+						Order History
+					</Link>
 				</li>
-				<li>
-					<Link to="/contact">Contact</Link>
+				<li className="w-full max-w-62.5 text-center">
+					<Link className="mb-2.5 block" to="/contact">
+						Contact
+					</Link>
 				</li>
 			</ul>
 		</div>

@@ -133,52 +133,6 @@ button:disabled {
 	margin: 15px 0;
 }
 
-.index h1 {
-	color: var(--primary);
-	font-family: var(--font);
-	font-weight: normal;
-}
-
-.index {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 30px;
-	max-width: 700px;
-	margin: 120px auto;
-}
-
-.index-brand {
-	display: flex;
-	flex-direction: column;
-}
-
-.index-brand p {
-	color: var(--secondary);
-	font-weight: bold;
-	font-size: 40px;
-	text-transform: uppercase;
-	max-width: 315px;
-}
-
-.index ul {
-	display: flex;
-	flex-direction: column;
-
-	align-items: center;
-	justify-content: center;
-}
-
-.index li,
-.index li a {
-	width: 100%;
-	max-width: 250px;
-	text-align: center;
-}
-
-.index li a {
-	margin-bottom: 10px;
-}
-
 .past-orders {
 	min-height: 650px;
 	max-width: 900px;
