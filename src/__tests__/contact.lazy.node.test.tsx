@@ -13,19 +13,27 @@ const queryClient = new QueryClient();
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
 
+const ContactRoute = Route.options.component;
+
+if (!ContactRoute) {
+	throw new Error("Contact route has no component");
+}
+
 test("can submit contact form", async () => {
 	fetchMocker.mockResponse(JSON.stringify({ status: "ok" }));
 	const screen = render(
 		// Seluruh komponen halaman contact yang dirender dengan dependency React Query-nya juga diuji
 		<QueryClientProvider client={queryClient}>
-			<Route.options.component />
+			<ContactRoute />
 		</QueryClientProvider>,
 	);
 
 	// Cari elemen berdasarkan placeholder di form
-	const nameInput = screen.getByPlaceholderText("Name");
-	const emailInput = screen.getByPlaceholderText("Email");
-	const msgTextArea = screen.getByPlaceholderText("Message");
+	const nameInput = screen.getByPlaceholderText("Name") as HTMLInputElement;
+	const emailInput = screen.getByPlaceholderText("Email") as HTMLInputElement;
+	const messageInput = screen.getByPlaceholderText(
+		"Message",
+	) as HTMLTextAreaElement;
 
 	// Data test (mewakili data yang akan dimasukkan pengguna)
 	const testData = {
@@ -37,7 +45,7 @@ test("can submit contact form", async () => {
 	// Menetapkan nilai properti value dari ketiga elemen DOM dengan data test yang sudah dibuat
 	nameInput.value = testData.name;
 	emailInput.value = testData.email;
-	msgTextArea.value = testData.message;
+	messageInput.value = testData.message;
 
 	// Tekan tombol submit
 	const btn = screen.getByRole("button");

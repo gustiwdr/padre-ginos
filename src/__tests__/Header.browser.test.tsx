@@ -7,11 +7,32 @@ import {
 	createRootRoute,
 } from "@tanstack/react-router";
 import { CartContext } from "../contexts";
+import type { CartItem } from "../contexts";
+import type { Pizza } from "../APIResponsesTypes";
+
+const testPizza: Pizza = {
+	id: "pepperoni",
+	name: "Pepperoni",
+	category: "Classic",
+	description: "Pepperoni pizza",
+	image: "/images/pepperoni.webp",
+	sizes: {
+		S: 10,
+		M: 15,
+		L: 20,
+	},
+};
+
+const testCart: CartItem[] = [
+	{ pizza: testPizza, size: "M", price: "$15.00" },
+	{ pizza: testPizza, size: "L", price: "$20.00" },
+	{ pizza: testPizza, size: "S", price: "$10.00" },
+];
 
 test("correctly renders a header with a zero cart count", async () => {
 	const rootRoute = createRootRoute({
 		component: () => (
-			<CartContext.Provider value={[[]]}>
+			<CartContext.Provider value={[[], () => {}]}>
 				<Header />
 			</CartContext.Provider>
 		),
@@ -29,9 +50,7 @@ test("correctly renders a header with a zero cart count", async () => {
 test("correctly renders a header with a three cart count", async () => {
 	const rootRoute = createRootRoute({
 		component: () => (
-			<CartContext.Provider
-				value={[[{ pizza: 1 }, { pizza: 2 }, { pizza: 3 }]]}
-			>
+			<CartContext.Provider value={[testCart, () => {}]}>
 				<Header />
 			</CartContext.Provider>
 		),
