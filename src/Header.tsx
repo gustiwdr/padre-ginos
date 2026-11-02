@@ -11,7 +11,7 @@ export default function Header() {
 				className="[grid-area:logo] flex items-center justify-center"
 				to="/"
 			>
-				<h1 className="[width:inherit] h-[110px] border-b border-border py-5 content-[url('/public/padre_gino.svg')]">
+				<h1 className="[width:inherit] h-[110px] border-b border-border py-5 content-[url('/padre_gino.svg')]">
 					Padre Gino&apos;s Pizza
 				</h1>
 			</Link>

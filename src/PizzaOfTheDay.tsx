@@ -17,7 +17,7 @@ const PizzaOfTheDay = () => {
 			<h2 className="text-center">Pizza Of The Day</h2>
 			<div className="flex items-center justify-center">
 				<div className="mr-7.5 leading-loose text-center">
-					<h3>{pizzaOfTheDay.name}</h3>
+					<h3 className="text-[1.17em] font-bold">{pizzaOfTheDay.name}</h3>
 					<p>{pizzaOfTheDay.description}</p>
 					<p className="pizza-of-the-day-price">
 						From: <span>{intl.format(pizzaOfTheDay.sizes.S)}</span>

@@ -68,7 +68,10 @@ function PastOrdersRoute() {
 					{data.map((order) => (
 						<tr key={order.order_id}>
 							<td>
-								<button onClick={() => setFocusedOrder(order.order_id)}>
+								<button
+									className="btn"
+									onClick={() => setFocusedOrder(order.order_id)}
+								>
 									{order.order_id}
 								</button>
 							</td>
@@ -80,11 +83,19 @@ function PastOrdersRoute() {
 			</table>
 
 			<div className="flex items-center justify-evenly">
-				<button disabled={page <= 1} onClick={() => setPage(page - 1)}>
+				<button
+					className="btn"
+					disabled={page <= 1}
+					onClick={() => setPage(page - 1)}
+				>
 					Previous
 				</button>
 				<div className="font-pacifico text-xl text-primary">{page}</div>
-				<button disabled={data.length < 10} onClick={() => setPage(page + 1)}>
+				<button
+					className="btn"
+					disabled={data.length < 10}
+					onClick={() => setPage(page + 1)}
+				>
 					Next
 				</button>
 			</div>
@@ -126,7 +137,9 @@ function PastOrdersRoute() {
 					) : (
 						<p>Sedang memuat...</p>
 					)}
-					<button onClick={() => setFocusedOrder(undefined)}>Close</button>
+					<button className="btn" onClick={() => setFocusedOrder(undefined)}>
+						Close
+					</button>
 				</Modal>
 			) : null}
 		</div>

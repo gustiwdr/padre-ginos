@@ -1,22 +1,29 @@
-@layer theme, base, legacy, components, utilities;
+@import "tailwindcss";
 
-@import "tailwindcss/theme.css" layer(theme);
-@import "./legacy.css" layer(legacy);
-@import "tailwindcss/utilities.css" layer(utilities);
+@plugin "@tailwindcss/forms" {
+	strategy: "class";
+}
 
 @theme {
 	--color-primary: #da2f04;
 	--color-secondary: #33670a;
 	--color-background: #fffaee;
 	--color-border: #ccc;
+
 	--font-pacifico: Pacifico, cursive, sans-serif;
+	--font-sans: Arial, sans-serif;
 }
 
-@plugin "@tailwindcss/forms" {
-	strategy: "class";
+@font-face {
+	font-family: Pacifico;
+	src: url("/Pacifico-Regular.ttf");
 }
 
 @layer base {
+	body {
+		@apply bg-background leading-[normal];
+	}
+
 	h2 {
 		@apply text-center font-pacifico text-[40px] font-normal text-primary;
 	}
@@ -36,7 +43,7 @@
 
 @layer components {
 	.btn {
-		@apply inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] text-primary;
+		@apply inline-block cursor-pointer rounded-[5px] border border-primary bg-transparent px-3.75 py-1.25 font-pacifico text-[20px] leading-[normal] text-primary;
 		@apply hover:bg-primary/10;
 		@apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
 		@apply disabled:bg-border disabled:opacity-50;
