@@ -35,14 +35,14 @@ function getPizzaOfTheDay() {
 	return pizza;
 }
 
-test("gives null when first called", async () => {
+test("gives null when first called", () => {
 	fetchMocker.mockResponseOnce(JSON.stringify(testPizza));
 	const pizza = getPizzaOfTheDay();
 	expect(pizza).toBeNull();
 });
 
 // Menggunakan API yang memang dirancang untuk menguji custom hook (renderHook => tanpa harus buat komponennya sendiri)
-test("to be null on initial load", async () => {
+test("to be null on initial load", () => {
 	fetchMocker.mockResponseOnce(JSON.stringify(testPizza));
 	const { result } = renderHook(() => usePizzaOfTheDay());
 	expect(result.current).toBeNull();

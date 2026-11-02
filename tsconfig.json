@@ -1,5 +1,4 @@
 {
-	// Visit https://aka.ms/tsconfig to read more about this file
 	"compilerOptions": {
 		"target": "ES2022",
 		"lib": ["ES2022", "DOM", "DOM.Iterable"],
@@ -8,11 +7,11 @@
 		"jsx": "react-jsx",
 		"strict": true,
 		"noEmit": true,
-		"allowJs": true,
 		"verbatimModuleSyntax": true,
 		"isolatedModules": true,
 		"moduleDetection": "force",
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"types": ["@vitest/browser/providers/playwright"]
 	},
-	"include": ["src"]
+	"include": ["src", "vite.config.ts", "vitest.workspace.ts"]
 }
