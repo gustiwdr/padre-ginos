@@ -5,6 +5,12 @@ import Cart from "../Cart";
 import type { Pizza as PizzaType, PizzaSize } from "../APIResponsesTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart, clearCart, selectCartItems } from "../cartSlice";
+import {
+	selectPizzaType,
+	setPizzaType,
+	selectPizzaSize,
+	setPizzaSize,
+} from "../orderSlice";
 
 // intl untuk format angka menjadi bentuk currency
 const intl = new Intl.NumberFormat("en-US", {
@@ -20,12 +26,12 @@ const sizeLabelClass =
 	"mx-3.75 mb-2.5 inline-flex h-20 w-20 cursor-pointer items-center justify-center rounded-[5px] border border-[#999] bg-border text-[#999] peer-checked:bg-white peer-checked:text-[#333] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary";
 
 function Order() {
-	const [pizzaType, setPizzaType] = useState("pepperoni");
-	const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
+	const pizzaType = useAppSelector(selectPizzaType);
+	const pizzaSize = useAppSelector(selectPizzaSize);
 	const [pizzaTypes, setPizzaTypes] = useState<PizzaType[]>([]);
-	const [loading, setLoading] = useState(false);
 	const cart = useAppSelector(selectCartItems);
 	const dispatch = useAppDispatch();
+	const [loading, setLoading] = useState(false);
 
 	async function checkout() {
 		setLoading(true);
@@ -96,7 +102,7 @@ function Order() {
 							<select
 								className="form-select mb-7.5 block w-full py-1.25 pl-1.25 text-[16px]"
 								name="pizzaType"
-								onChange={(e) => setPizzaType(e.target.value)}
+								onChange={(e) => dispatch(setPizzaType(e.target.value))}
 								value={pizzaType}
 							>
 								{pizzaTypes.map((pizza) => (
@@ -122,7 +128,9 @@ function Order() {
 										id="pizza-s"
 										checked={pizzaSize === "S"}
 										value="S"
-										onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+										onChange={(e) =>
+											dispatch(setPizzaSize(e.target.value as PizzaSize))
+										}
 									/>
 									<label className={sizeLabelClass} htmlFor="pizza-s">
 										Small
@@ -136,7 +144,9 @@ function Order() {
 										id="pizza-m"
 										checked={pizzaSize === "M"}
 										value="M"
-										onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+										onChange={(e) =>
+											dispatch(setPizzaSize(e.target.value as PizzaSize))
+										}
 									/>
 									<label className={sizeLabelClass} htmlFor="pizza-m">
 										Medium
@@ -150,7 +160,9 @@ function Order() {
 										id="pizza-l"
 										checked={pizzaSize === "L"}
 										value="L"
-										onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+										onChange={(e) =>
+											dispatch(setPizzaSize(e.target.value as PizzaSize))
+										}
 									/>
 									<label className={sizeLabelClass} htmlFor="pizza-l">
 										Large
