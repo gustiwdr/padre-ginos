@@ -6,9 +6,10 @@ import {
 	createRouter,
 	createRootRoute,
 } from "@tanstack/react-router";
-import { CartContext } from "../contexts";
-import type { CartItem } from "../contexts";
+import type { CartItem } from "../cartSlice";
 import type { Pizza } from "../APIResponsesTypes";
+import { Provider } from "react-redux";
+import { makeStore } from "../store";
 
 const testPizza: Pizza = {
 	id: "pepperoni",
@@ -32,9 +33,9 @@ const testCart: CartItem[] = [
 test("correctly renders a header with a zero cart count", async () => {
 	const rootRoute = createRootRoute({
 		component: () => (
-			<CartContext.Provider value={[[], () => {}]}>
+			<Provider store={makeStore()}>
 				<Header />
-			</CartContext.Provider>
+			</Provider>
 		),
 	});
 
@@ -50,9 +51,9 @@ test("correctly renders a header with a zero cart count", async () => {
 test("correctly renders a header with a three cart count", async () => {
 	const rootRoute = createRootRoute({
 		component: () => (
-			<CartContext.Provider value={[testCart, () => {}]}>
+			<Provider store={makeStore({ cart: { items: testCart } })}>
 				<Header />
-			</CartContext.Provider>
+			</Provider>
 		),
 	});
 
