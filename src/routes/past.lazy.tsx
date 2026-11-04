@@ -1,9 +1,7 @@
 import { skipToken } from "@reduxjs/toolkit/query/react";
-import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { useGetPastOrderQuery } from "../api/pizzaApi";
-import getPastOrders from "../api/getPastOrders";
+import { useGetPastOrderQuery, useGetPastOrdersQuery } from "../api/pizzaApi";
 import ErrorBoundary from "../ErrorBoundary";
 import Modal from "../Modal";
 
@@ -37,11 +35,8 @@ function PastOrdersRoute() {
 		focusedOrder ?? skipToken,
 	);
 
-	const { isLoading, data } = useQuery({
-		queryKey: ["past-orders", page],
-		queryFn: () => getPastOrders(page),
-		staleTime: 30000,
-	});
+	const { currentData, isLoading, isFetching, isError } =
+		useGetPastOrdersQuery(page);
 
 	if (isLoading) {
 		return (
@@ -51,22 +46,27 @@ function PastOrdersRoute() {
 		);
 	}
 
-	if (!data) {
+	if (isError) {
 		throw new Error("Past orders could not be loaded");
+	}
+
+	if (!currentData) {
+		return <p>Sedang memuat...</p>;
 	}
 
 	return (
 		<div className="mx-auto min-h-[650px] w-[90%] max-w-[900px]">
+			{isFetching && <p>Memperbarui data...</p>}
 			<table className={tableClass}>
 				<thead>
 					<tr>
-						<td>ID</td>
-						<td>Date</td>
-						<td>Time</td>
+						<th>ID</th>
+						<th>Date</th>
+						<th>Time</th>
 					</tr>
 				</thead>
 				<tbody>
-					{data.map((order) => (
+					{currentData.map((order) => (
 						<tr key={order.order_id}>
 							<td>
 								<button
@@ -86,7 +86,7 @@ function PastOrdersRoute() {
 			<div className="flex items-center justify-evenly">
 				<button
 					className="btn"
-					disabled={page <= 1}
+					disabled={isFetching || page <= 1}
 					onClick={() => setPage(page - 1)}
 				>
 					Previous
@@ -94,7 +94,7 @@ function PastOrdersRoute() {
 				<div className="font-pacifico text-xl text-primary">{page}</div>
 				<button
 					className="btn"
-					disabled={data.length < 10}
+					disabled={isFetching || currentData.length < 10}
 					onClick={() => setPage(page + 1)}
 				>
 					Next
@@ -108,12 +108,12 @@ function PastOrdersRoute() {
 						<table className={tableClass}>
 							<thead>
 								<tr>
-									<td>Image</td>
-									<td>Name</td>
-									<td>Size</td>
-									<td>Quantity</td>
-									<td>Price</td>
-									<td>Total</td>
+									<th>Image</th>
+									<th>Name</th>
+									<th>Size</th>
+									<th>Quantity</th>
+									<th>Price</th>
+									<th>Total</th>
 								</tr>
 							</thead>
 							<tbody>
