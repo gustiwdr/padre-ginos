@@ -1,6 +1,5 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Header from "../Header";
 import PizzaOfTheDay from "../PizzaOfTheDay";
 
@@ -16,7 +15,6 @@ export const Route = createRootRoute({
 
 			{/* Devtools hanya alat bantu debugging routing saat development */}
 			<TanStackRouterDevtools />
-			<ReactQueryDevtools />
 		</>
 	),
 });

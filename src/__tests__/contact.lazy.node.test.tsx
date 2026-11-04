@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route } from "../routes/contact.lazy";
 import { Provider } from "react-redux";
 import { makeStore } from "../store";
