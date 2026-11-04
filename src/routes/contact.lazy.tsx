@@ -36,7 +36,9 @@ function ContactRoute() {
 				<form
 					className="flex flex-col items-center"
 					action=""
-					onSubmit={handleSubmit}
+					onSubmit={(e) => {
+						void handleSubmit(e);
+					}}
 				>
 					<input
 						className="my-3.75 w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999] bg-white"
