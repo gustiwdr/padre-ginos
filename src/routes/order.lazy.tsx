@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Pizza from "../Pizza";
 import Cart from "../Cart";
 import type { Pizza as PizzaType, PizzaSize } from "../APIResponsesTypes";
@@ -11,6 +11,7 @@ import {
 	selectPizzaSize,
 	setPizzaSize,
 } from "../orderSlice";
+import { useGetPizzasQuery } from "../api/pizzaApi";
 
 // intl untuk format angka menjadi bentuk currency
 const intl = new Intl.NumberFormat("en-US", {
@@ -28,13 +29,15 @@ const sizeLabelClass =
 function Order() {
 	const pizzaType = useAppSelector(selectPizzaType);
 	const pizzaSize = useAppSelector(selectPizzaSize);
-	const [pizzaTypes, setPizzaTypes] = useState<PizzaType[]>([]);
+	const { data: pizzaTypes = [], isLoading: isLoadingPizzas } =
+		useGetPizzasQuery();
 	const cart = useAppSelector(selectCartItems);
 	const dispatch = useAppDispatch();
-	const [loading, setLoading] = useState(false);
+	const [isCheckingOut, setIsCheckingOut] = useState(false);
+	const loading = isLoadingPizzas || isCheckingOut;
 
 	async function checkout() {
-		setLoading(true);
+		setIsCheckingOut(true);
 
 		await fetch("/api/order", {
 			method: "POST",
@@ -47,7 +50,7 @@ function Order() {
 		});
 
 		dispatch(clearCart());
-		setLoading(false);
+		setIsCheckingOut(false);
 	}
 
 	let price: string | undefined;
@@ -57,19 +60,6 @@ function Order() {
 		price = selectedPizza
 			? intl.format(selectedPizza.sizes[pizzaSize])
 			: undefined;
-	}
-
-	useEffect(() => {
-		void fetchPizzaTypes();
-	}, []);
-
-	async function fetchPizzaTypes() {
-		await new Promise((res) => setTimeout(res, 3000));
-
-		const pizzaRes = await fetch("/api/pizzas");
-		const pizzasJson = (await pizzaRes.json()) as PizzaType[];
-		setPizzaTypes(pizzasJson);
-		setLoading(false);
 	}
 
 	return (
