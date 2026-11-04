@@ -1,10 +1,11 @@
-import { skipToken, useQuery } from "@tanstack/react-query";
+import { skipToken } from "@reduxjs/toolkit/query/react";
+import { useQuery } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useGetPastOrderQuery } from "../api/pizzaApi";
 import getPastOrders from "../api/getPastOrders";
-import getPastOrder from "../api/getPastOrder";
-import Modal from "../Modal";
 import ErrorBoundary from "../ErrorBoundary";
+import Modal from "../Modal";
 
 const intl = new Intl.NumberFormat("en-US", {
 	style: "currency",
@@ -30,11 +31,11 @@ function PastOrdersRoute() {
 	const [focusedOrder, setFocusedOrder] = useState<number>();
 	const [page, setPage] = useState(1);
 
-	const { data: focusedOrderData } = useQuery({
-		queryKey: ["past-order", focusedOrder],
-		queryFn: focusedOrder ? () => getPastOrder(focusedOrder) : skipToken,
-		staleTime: 24 * 60 * 60 * 1000,
-	});
+	const { data: focusedOrderData } = useGetPastOrderQuery(
+		// jika focusedOrder, memiliki nilai, argumen tersebut diteruskan
+		// jika focusedOrder undefined, RTK Query menerima skipToken (tidak melakukan fetching)
+		focusedOrder ?? skipToken,
+	);
 
 	const { isLoading, data } = useQuery({
 		queryKey: ["past-orders", page],
