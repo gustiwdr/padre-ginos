@@ -1,5 +1,4 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import Pizza from "../Pizza";
 import Cart from "../Cart";
 import type { Pizza as PizzaType, PizzaSize } from "../APIResponsesTypes";
@@ -11,7 +10,7 @@ import {
 	selectPizzaSize,
 	setPizzaSize,
 } from "../orderSlice";
-import { useGetPizzasQuery } from "../api/pizzaApi";
+import { useGetPizzasQuery, usePlaceOrderMutation } from "../api/pizzaApi";
 
 // intl untuk format angka menjadi bentuk currency
 const intl = new Intl.NumberFormat("en-US", {
@@ -31,26 +30,14 @@ function Order() {
 	const pizzaSize = useAppSelector(selectPizzaSize);
 	const { data: pizzaTypes = [], isLoading: isLoadingPizzas } =
 		useGetPizzasQuery();
+	const [placeOrder, { isLoading: isPlacingOrder }] = usePlaceOrderMutation();
 	const cart = useAppSelector(selectCartItems);
 	const dispatch = useAppDispatch();
-	const [isCheckingOut, setIsCheckingOut] = useState(false);
-	const loading = isLoadingPizzas || isCheckingOut;
+	const loading = isLoadingPizzas || isPlacingOrder;
 
 	async function checkout() {
-		setIsCheckingOut(true);
-
-		await fetch("/api/order", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({
-				cart,
-			}),
-		});
-
+		await placeOrder(cart);
 		dispatch(clearCart());
-		setIsCheckingOut(false);
 	}
 
 	let price: string | undefined;
