@@ -30,6 +30,20 @@ export const pizzaApi = createApi({
 			// a new order changes the past-orders list
 			invalidatesTags: ["PastOrders"],
 		}),
+		sendContact: build.mutation<
+			unknown,
+			{
+				name: string;
+				email: string;
+				message: string;
+			}
+		>({
+			query: (body) => ({
+				url: "contact",
+				method: "POST",
+				body,
+			}),
+		}),
 	}),
 });
 
@@ -39,4 +53,5 @@ export const {
 	useGetPastOrderQuery,
 	useGetPastOrdersQuery,
 	usePlaceOrderMutation,
+	useSendContactMutation,
 } = pizzaApi;

@@ -1,7 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import type { SubmitEvent } from "react";
-import postContact from "../api/postContact";
+import { useSendContactMutation } from "../api/pizzaApi";
 
 function getString(formData: FormData, key: string): string {
 	const value = formData.get(key);
@@ -13,23 +11,24 @@ export const Route = createLazyFileRoute("/contact")({
 });
 
 function ContactRoute() {
-	const mutation = useMutation({
-		mutationFn: function (e: SubmitEvent<HTMLFormElement>) {
-			e.preventDefault();
-			const formData = new FormData(e.target);
+	const [sendContact, { isSuccess, isLoading }] = useSendContactMutation();
 
-			return postContact(
-				getString(formData, "name"),
-				getString(formData, "email"),
-				getString(formData, "message"),
-			);
-		},
-	});
+	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+
+		await sendContact({
+			name: getString(formData, "name"),
+			email: getString(formData, "email"),
+			message: getString(formData, "message"),
+		}).unwrap();
+	}
 
 	return (
 		<div className="contact">
 			<h2>Contact</h2>
-			{mutation.isSuccess ? (
+			{isSuccess ? (
 				<h3 className="m-12.5 text-center font-normal text-[30px] text-secondary font-pacifico">
 					Submitted!
 				</h3>
@@ -37,7 +36,7 @@ function ContactRoute() {
 				<form
 					className="flex flex-col items-center"
 					action=""
-					onSubmit={mutation.mutate}
+					onSubmit={handleSubmit}
 				>
 					<input
 						className="my-3.75 w-full max-w-125 rounded-[5px] border-2 border-border p-2 focus:border-primary disabled:bg-[#999] bg-white"
@@ -57,7 +56,9 @@ function ContactRoute() {
 						id=""
 						placeholder="Message"
 					></textarea>
-					<button className="btn">Submit</button>
+					<button className="btn" disabled={isLoading}>
+						Submit
+					</button>
 				</form>
 			)}
 		</div>

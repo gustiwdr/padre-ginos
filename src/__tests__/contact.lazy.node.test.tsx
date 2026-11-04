@@ -3,9 +3,8 @@ import { expect, test, vi } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route } from "../routes/contact.lazy";
-
-// Buat objek yang mengelola cache dan operasi TanStack Query
-const queryClient = new QueryClient();
+import { Provider } from "react-redux";
+import { makeStore } from "../store";
 
 // Buat fetch versi palsu untuk testing, di mana fetch mengirim HTTP request ke endpoint
 // createFetchMock(vi): membuat util mock
@@ -22,10 +21,9 @@ if (!ContactRoute) {
 test("can submit contact form", async () => {
 	fetchMocker.mockResponse(JSON.stringify({ status: "ok" }));
 	const screen = render(
-		// Seluruh komponen halaman contact yang dirender dengan dependency React Query-nya juga diuji
-		<QueryClientProvider client={queryClient}>
+		<Provider store={makeStore()}>
 			<ContactRoute />
-		</QueryClientProvider>,
+		</Provider>,
 	);
 
 	// Cari elemen berdasarkan placeholder di form
@@ -60,12 +58,11 @@ test("can submit contact form", async () => {
 	const requests = fetchMocker.requests();
 	expect(requests.length).toBe(1);
 	expect(requests[0].url).toBe("/api/contact");
-	// Periksa seluruh konfigurasi request
-	expect(fetchMocker).toHaveBeenCalledWith("/api/contact", {
-		body: JSON.stringify(testData),
-		headers: {
-			"Content-Type": "application/json",
-		},
-		method: "POST",
-	});
+
+	const request = fetchMocker.mock.calls[0][0] as Request;
+
+	expect(request.url).toBe("/api/contact");
+	expect(request.method).toBe("POST");
+	expect(request.headers.get("content-type")).toContain("application/json");
+	expect(await request.clone().json()).toEqual(testData);
 });
